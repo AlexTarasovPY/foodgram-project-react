@@ -42,3 +42,4 @@ jobs:
             context: ./frontend/
             push: true
             tags: alectyp/frontend:latest
+
