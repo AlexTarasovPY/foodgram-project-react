@@ -9,7 +9,7 @@ load_dotenv()
 
 SECRET_KEY = os.getenv(
     'SECRET_KEY',
-    default='django-insecure-(30#stvh6+fj%=t^l@_ah!z1*nef9(d$q)1z^3##@04s&)7b=r'
+    default='any'
 )
 
 
