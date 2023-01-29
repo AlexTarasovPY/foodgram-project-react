@@ -6,13 +6,17 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv()
 
-SECRET_KEY = 'django-insecure-(30#stvh6+fj%=t^l@_ah!z1*nef9(d$q)1z^3##@04s&)7b=r'
+SECRET_KEY = os.getenv(
+    'SECRET_KEY',
+    default='django-insecure-(30#stvh6+fj%=t^l@_ah!z1*nef9(d$q)1z^3##@04s&)7b=r'
+)
 
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 REST_FRAMEWORK = {
@@ -45,6 +49,7 @@ INSTALLED_APPS = [
     'django_filters',
     'users.apps.UsersConfig',
     'recipes.apps.RecipesConfig',
+    'colorfield',
 ]
 
 MIDDLEWARE = [
@@ -55,18 +60,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
 
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_URLS_REGEX = r'^/api/.*$'
-
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-]
 
 TEMPLATES = [
     {
@@ -89,8 +87,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME', default='postgres'),
+        'USER': os.getenv('POSTGRES_USER', default='postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
+        'HOST': os.getenv('DB_HOST', default='db'),
+        'PORT': os.getenv('DB_PORT', default=5432)
     }
 }
 
@@ -134,11 +136,11 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static_backend/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_backend')
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media_backend/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_backend')
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

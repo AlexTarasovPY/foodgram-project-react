@@ -4,12 +4,19 @@ from djoser.serializers import UserSerializer
 from rest_framework import serializers
 from drf_extra_fields.fields import Base64ImageField
 
-from recipes.models import Subscribe, Recipe
+from recipes.models import (
+    Subscribe,
+    Recipe
+)
 
 User = get_user_model()
 
 
 class CustomUserSerializer(UserSerializer):
+    """
+    Сериализатор получения данных пользователей модуля djoser.
+    """
+
     is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
@@ -21,12 +28,16 @@ class CustomUserSerializer(UserSerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context['request'].user
-        if user.is_authenticated:
-            return Subscribe.objects.filter(subscribed=obj, user=user).exists()
-        return False
+        return (user.is_authenticated and
+                Subscribe.objects.filter(subscribed=obj, user=user).exists()
+                )
 
 
 class CustomUserCreateSerializer(UserSerializer):
+    """
+    Сериализатор создания новых пользователей модуля djoser.
+    """
+
     class Meta:
         model = User
         fields = (
@@ -43,6 +54,11 @@ class CustomUserCreateSerializer(UserSerializer):
 
 
 class RecipeSmallSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор получения данных пользователей
+    для запросов информации о подписках.
+    """
+
     image = Base64ImageField()
 
     class Meta:
@@ -53,6 +69,10 @@ class RecipeSmallSerializer(serializers.ModelSerializer):
 
 
 class SubscribeSerializer(serializers.ModelSerializer):
+    """
+    Сериализатор создания и удаления подписок пользователя.
+    """
+
     email = serializers.SerializerMethodField()
     id = serializers.PrimaryKeyRelatedField(
         source='subscribed_id', read_only=True

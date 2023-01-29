@@ -1,6 +1,15 @@
 from django.contrib import admin
-from .models import Recipe, Subscribe, Tag, Ingredient, FavoriteRecipes
-from .models import ShoppingList, RecipeIngredients, RecipeTags
+
+from .models import (
+    Recipe,
+    Subscribe,
+    Tag,
+    Ingredient,
+    FavoriteRecipes,
+    ShoppingList,
+    RecipeIngredients,
+    RecipeTags
+)
 
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -35,11 +44,77 @@ class IngredientAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-admin.site.register(Subscribe)
-admin.site.register(Tag)
-admin.site.register(RecipeIngredients)
-admin.site.register(ShoppingList)
-admin.site.register(FavoriteRecipes)
-admin.site.register(RecipeTags)
+class SubscribeAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'user', 'subscribed',
+    )
+    list_editable = (
+        'user', 'subscribed',
+    )
+    search_fields = ('user__username', 'subscribed__username')
+    empty_value_display = '-пусто-'
+
+
+class ShoppingListAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'user', 'recipe',
+    )
+    list_editable = (
+        'user', 'recipe',
+    )
+    search_fields = ('user__username', 'recipe__name')
+    empty_value_display = '-пусто-'
+
+
+class TagAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'name', 'color', 'slug'
+    )
+    list_editable = (
+        'name', 'color', 'slug',
+    )
+    search_fields = ('name', 'color', 'slug')
+    empty_value_display = '-пусто-'
+
+
+class FavoriteRecipesAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'user', 'recipe',
+    )
+    list_editable = (
+        'user', 'recipe',
+    )
+    search_fields = ('user__username', 'recipe__name')
+    empty_value_display = '-пусто-'
+
+
+class RecipeingredientsAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'recipe', 'ingredient', 'amount',
+    )
+    list_editable = (
+        'recipe', 'ingredient', 'amount',
+    )
+    search_fields = ('recipe__name', 'ingredient__name')
+    empty_value_display = '-пусто-'
+
+
+class RecipeTagsAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk', 'recipe', 'tag',
+    )
+    list_editable = (
+        'recipe', 'tag',
+    )
+    search_fields = ('recipe__name', 'tag__name')
+    empty_value_display = '-пусто-'
+
+
+admin.site.register(Subscribe, SubscribeAdmin)
+admin.site.register(Tag, TagAdmin)
+admin.site.register(ShoppingList, ShoppingListAdmin)
+admin.site.register(FavoriteRecipes, FavoriteRecipesAdmin)
+admin.site.register(RecipeTags, RecipeTagsAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
+admin.site.register(RecipeIngredients, RecipeingredientsAdmin)

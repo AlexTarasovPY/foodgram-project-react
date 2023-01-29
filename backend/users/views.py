@@ -13,6 +13,9 @@ User = get_user_model()
 
 
 class SubscribeView(APIView):
+    """
+    Создание и удаление подписок пользователя.
+    """
 
     def post(self, request, *args, **kwargs):
         serializer = SubscribeSerializer(
@@ -56,6 +59,10 @@ class SubscribeView(APIView):
 
 
 class SubscriptionsView(APIView, LimitOffsetPagination):
+    """
+    Получение информации о подписках пользователя.
+    """
+
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, *args, **kwargs):

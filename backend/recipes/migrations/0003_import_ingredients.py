@@ -3,7 +3,7 @@
 from django.db import migrations
 import json
 
-with open('../data/ingredients.json', 'r', encoding='utf-8') as json_file:
+with open('data/ingredients.json', 'r', encoding='utf-8') as json_file:
     INGREDIENTS = json.load(json_file)
 
 
