@@ -76,9 +76,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if tags:
             tags_id = list(Tag.objects.filter(slug__in=tags))
             recipe_id = list(
-                RecipeTags.objects.filter(tag_id__in=tags_id).values_list(
-                    'recipe_id', flat=True)
-                )
+                RecipeTags.objects.filter(
+                    tag_id__in=tags_id
+                ).values_list('recipe_id', flat=True))
             qs = qs.filter(id__in=recipe_id)
         if user.is_authenticated:
             if is_favorited:
@@ -91,9 +91,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             if is_in_shopping_cart:
                 shopping_cart_recipes = list(
                     ShoppingList.objects.filter(user=user).values_list(
-                        'recipe_id', flat=True
-                        )
-                    )
+                        'recipe_id', flat=True))
                 qs = qs.filter(id__in=shopping_cart_recipes)
         if author is not None:
             qs = qs.filter(author=author)
@@ -150,10 +148,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
         if request.method == "POST":
             serializer = ShoppingCartSerializer(
-                data=request.data,  context={
+                data=request.data, context={
                     "request": request, "recipe_id": kwargs["pk"]
-                }
-                )
+                })
             if serializer.is_valid():
                 recipe = Recipe.objects.get(id=kwargs["pk"])
                 serializer.save(user=request.user, recipe=recipe)
@@ -204,8 +201,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 )
             except FavoriteRecipes.DoesNotExist:
                 raise serializers.ValidationError({
-                    'errors': 'Рецепт не существует или ' +
-                    'отсутствует в избранном'
+                    'errors': 'Рецепт не существует или '
+                    + 'отсутствует в избранном'
                 })
             favorite_recipe.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)

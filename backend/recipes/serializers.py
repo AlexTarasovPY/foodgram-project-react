@@ -1,8 +1,8 @@
 from rest_framework import serializers
+
 from django.contrib.auth import get_user_model
 from drf_extra_fields.fields import Base64ImageField
 from django.db import transaction
-
 from .models import (
     Recipe,
     Ingredient,
@@ -12,7 +12,6 @@ from .models import (
     RecipeIngredients,
     Subscribe
 )
-
 
 User = get_user_model()
 
@@ -228,8 +227,10 @@ class AuthorRecipeGetSerializer(serializers.ModelSerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context['request'].user
-        return (user.is_authenticated and
-                Subscribe.objects.filter(subscribed=obj, user=user).exists())
+        return (user.is_authenticated
+                and Subscribe.objects.filter(
+                    subscribed=obj, user=user).exists()
+                )
 
     class Meta:
         model = User

@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 from djoser.serializers import UserSerializer
 from rest_framework import serializers
 from drf_extra_fields.fields import Base64ImageField
-
 from recipes.models import (
     Subscribe,
     Recipe
@@ -28,9 +27,10 @@ class CustomUserSerializer(UserSerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context['request'].user
-        return (user.is_authenticated and
-                Subscribe.objects.filter(subscribed=obj, user=user).exists()
-                )
+        return (
+            user.is_authenticated
+            and Subscribe.objects.filter(subscribed=obj, user=user).exists()
+        )
 
 
 class CustomUserCreateSerializer(UserSerializer):

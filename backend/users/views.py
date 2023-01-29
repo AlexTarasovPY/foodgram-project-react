@@ -19,7 +19,7 @@ class SubscribeView(APIView):
 
     def post(self, request, *args, **kwargs):
         serializer = SubscribeSerializer(
-            data=request.data,  context={
+            data=request.data, context={
                 "request": request, "user_id": self.kwargs.get("user_id")
             }
         )
@@ -70,7 +70,7 @@ class SubscriptionsView(APIView, LimitOffsetPagination):
 
         result_page = self.paginate_queryset(subscribes, request, view=self)
         serializer = SubscribeSerializer(
-            result_page, many=True,  context={
+            result_page, many=True, context={
                 "request": request,
             }
         )
