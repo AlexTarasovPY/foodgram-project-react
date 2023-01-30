@@ -13,7 +13,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
@@ -40,7 +39,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
-    'corsheaders',
     'django_filters',
     'users.apps.UsersConfig',
     'recipes.apps.RecipesConfig',
