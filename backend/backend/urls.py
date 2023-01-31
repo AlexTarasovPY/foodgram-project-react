@@ -23,5 +23,4 @@ urlpatterns = [
     ),
     path('api/', include(router_v1.urls)),
     path('api/', include('djoser.urls')),
-
 ]

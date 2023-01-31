@@ -3,9 +3,9 @@
 from django.db import migrations
 
 INITIAL_TAGS = [
-    {'color': '#90EE90', 'name': 'Завтрак', 'slug': 'breakfasttt'},
-    {'color': '#ADD8E6', 'name': 'Обед', 'slug': 'lunchhh'},
-    {'color': '#FF7F50', 'name': 'Ужин', 'slug': 'dinnerrr'},
+    {'color': '#90EE90', 'name': 'Завтрак', 'slug': 'breakfast'},
+    {'color': '#ADD8E6', 'name': 'Обед', 'slug': 'lunch'},
+    {'color': '#FF7F50', 'name': 'Ужин', 'slug': 'dinner'},
 ]
 
 

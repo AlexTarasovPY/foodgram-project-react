@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
-from rest_framework.pagination import LimitOffsetPagination
+from recipes.pagination import LimitPagination
 
 from recipes.models import Subscribe
 from .serializers import SubscribeSerializer
@@ -58,7 +58,7 @@ class SubscribeView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class SubscriptionsView(APIView, LimitOffsetPagination):
+class SubscriptionsView(APIView, LimitPagination):
     """
     Получение информации о подписках пользователя.
     """

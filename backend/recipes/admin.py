@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+
 from .models import (
     Recipe,
     Subscribe,
@@ -8,7 +9,6 @@ from .models import (
     FavoriteRecipes,
     ShoppingList,
     RecipeIngredients,
-    RecipeTags
 )
 
 
@@ -99,22 +99,10 @@ class RecipeingredientsAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-class RecipeTagsAdmin(admin.ModelAdmin):
-    list_display = (
-        'pk', 'recipe', 'tag',
-    )
-    list_editable = (
-        'recipe', 'tag',
-    )
-    search_fields = ('recipe__name', 'tag__name')
-    empty_value_display = '-пусто-'
-
-
 admin.site.register(Subscribe, SubscribeAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(ShoppingList, ShoppingListAdmin)
 admin.site.register(FavoriteRecipes, FavoriteRecipesAdmin)
-admin.site.register(RecipeTags, RecipeTagsAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(RecipeIngredients, RecipeingredientsAdmin)

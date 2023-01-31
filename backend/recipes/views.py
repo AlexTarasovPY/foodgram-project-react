@@ -16,7 +16,6 @@ from .models import (
     Tag,
     FavoriteRecipes,
     ShoppingList,
-    RecipeTags,
     RecipeIngredients
 )
 from .serializers import (
@@ -40,7 +39,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     filter_backends = (DjangoFilterBackend, filters.SearchFilter)
-    search_fields = ('name',)
+    search_fields = ('^name',)
     pagination_class = None
 
 
@@ -74,12 +73,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
         qs = Recipe.objects.all()
         if tags:
-            tags_id = list(Tag.objects.filter(slug__in=tags))
-            recipe_id = list(
-                RecipeTags.objects.filter(
-                    tag_id__in=tags_id
-                ).values_list('recipe_id', flat=True))
-            qs = qs.filter(id__in=recipe_id)
+            recipes = list(
+                Tag.objects.filter(slug__in=tags).values_list(
+                    'recipes', flat=True
+                )
+            )
+            qs = qs.filter(id__in=recipes)
         if user.is_authenticated:
             if is_favorited:
                 favorite_recipes = list(
@@ -123,7 +122,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
         purchases = purchases.values(
             'ingredient__name', 'ingredient__measurement_unit'
-        ).annotate(
+        ).order_by().values("ingredient__name").annotate(
             name=F('ingredient__name'),
             units=F('ingredient__measurement_unit'),
             total_amt=Sum('amount')

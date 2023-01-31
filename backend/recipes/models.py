@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from colorfield.fields import ColorField
+from django import forms
 
 User = get_user_model()
 
@@ -19,15 +20,17 @@ class Subscribe(models.Model):
         related_name='subscribed'
     )
 
+    def clean(self):
+        if self.user == self.subscribed:
+            raise forms.ValidationError(
+                'Подписчик и автор не должны совпадать.'
+            )
+
     class Meta:
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'subscribed'],
                 name='unique_subscribe'
-            ),
-            models.CheckConstraint(
-                check=~models.Q(user=models.F('subscribed')),
-                name='do_not_subscribe_to_yourself',
             ),
         ]
         verbose_name = "Подписка"
@@ -81,7 +84,8 @@ class Recipe(models.Model):
         verbose_name='Время приготовления, мин.'
     )
     tags = models.ManyToManyField(
-        Tag, through='RecipeTags', verbose_name='Тэги'
+        Tag, verbose_name='Тэги',
+        related_name='recipes',
     )
     ingredients = models.ManyToManyField(
         Ingredient, through='RecipeIngredients', verbose_name='Ингредиенты'
@@ -117,16 +121,6 @@ class RecipeIngredients(models.Model):
         verbose_name = 'Ингредиент в рецепте'
         verbose_name_plural = 'Ингредиенты в рецептах'
         ordering = ('recipe',)
-
-
-class RecipeTags(models.Model):
-    """Модель учета тегов, добавленных в рецепты"""
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
-
-    class Meta:
-        verbose_name = "Тэг рецепта"
-        verbose_name_plural = "Тэги в рецептах"
 
 
 class FavoriteRecipes(models.Model):
